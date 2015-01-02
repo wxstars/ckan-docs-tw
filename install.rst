@@ -1,15 +1,15 @@
 ckan 安裝
 ========================================
 
-1. 安裝必須套件
+1. 安装依赖组件
 ------------------------
    .. code-block:: bash
 
       $ sudo apt-get install python-dev postgresql libpq-dev python-pip python-virtualenv git-core jetty8 openjdk-7-jdk
 
-2. Virtual environment 設定
+2. Virtual environment 设置 
 ----------------------------
-a. 新增一個 virtual environment (virtualenv) 供 ckan 使用：
+a. 新增一个 virtual environment (virtualenv) 供 ckan 使用：
 
    .. code-block:: bash
 
@@ -17,7 +17,7 @@ a. 新增一個 virtual environment (virtualenv) 供 ckan 使用：
       $ sudo chown `whoami` /usr/lib/ckan/default
       $ virtualenv --no-site-packages /usr/lib/ckan/default
 
-b. 進入剛才新增的 virtualenv：
+b. 进入刚才新增的 virtualenv：
 
    .. code-block:: bash
 
@@ -25,56 +25,56 @@ b. 進入剛才新增的 virtualenv：
 
    .. note::
 
-      要離開 virtualenv，可使用 deactivate 指令。若需要返回 virtualenv，可以再執行一次 . /usr/lib/ckan/default/bin/activate 即可。
+      要离开 virtualenv，可使用 deactivate 指令。若需要返回 virtualenv，可以再运行一次 . /usr/lib/ckan/default/bin/activate 即可。
 
-3. 安裝 ckan 2.0
+3. 安装 ckan 2.0
 -----------------
-   自 github ckeckout source (這邊以 release-2.0 為例）並安裝：
+   自 github ckeckout source (这边以 release-2.0 为例）并安装：
 
    .. code-block:: bash
 
       (pyenv) $ pip install -e 'git+https://github.com/okfn/ckan.git@ckan-2.0#egg=ckan'
 
-   安裝所需 Python 套件：
+   安装所需 Python 组件：
 
    .. code-block:: bash
 
       (pyenv) $ pip install -r /usr/lib/ckan/default/src/ckan/pip-requirements.txt
 
-4. 設定資料庫
+4. 设定数据库
 --------------
-a. 新增 ckan 使用之 postgreSQL 使用者：
+a. 新增 ckan 使用之 postgreSQL 用户：
 
    .. code-block:: bash
 
       $ sudo -u postgres createuser -S -D -R -P ckan_default
 
-b. 新增 ckan 使用之資料庫：
+b. 新增 ckan 使用之数据库：
 
    .. code-block:: bash
 
       $ sudo -u postgres createdb -O ckan_default ckan_default -E utf-8
 
-5. 建立 ckan 設定檔
+5. 建立 ckan 设置文件
 --------------------
-a. 新增放置 ckan 設定檔之目錄：
+a. 新增放置 ckan 设置文件的目录：
 
    .. code-block:: bash
 
       $ sudo mkdir -p /etc/ckan/default
       $ sudo chown -R `whoami` /etc/ckan/
 
-b. 透過 paster 新增範例設定檔：
+b. 透过 paster 新增示例设置文件：
 
    .. important::
 
-      執行任何 paster 指令時，請確認是在 virtualenv 下
+      运行任何 paster 指令时，请确认是在 virtualenv 下
 
    .. code-block:: bash
 
       (pyenv) $ paster make-config ckan /etc/ckan/default/development.ini
 
-c. 修改前面新增的 development.ini，搜尋下面字串，並將帳號密碼與 db 名稱依照 4. 所新增的 db 設定：
+c. 修改前面新增的 development.ini，搜寻下面字串，并将帐号密码与 db 名称依照 4. 所新增的 db 设定：
 
    .. code-block:: ini
 
@@ -82,11 +82,11 @@ c. 修改前面新增的 development.ini，搜尋下面字串，並將帳號密�
 
    .. note::
 
-      第一個 ckan_default 是使用者名稱，pass 請填寫 db 密碼，最後的 ckan_default 填入 db 名稱）
+      第一个 ckan_default 是使用者名称，pass 请填写 db 密码，最后的 ckan_default 填入 db 名称）
 
-6. 設定 jetty8 與 solr4（w/搜尋中文支援）
+6. 设定 jetty8 与 solr4（w/搜索中文支援）
 -----------------------------------------
-a. 修改 jetty 設定（位於 /etc/default/jetty8）：
+a. 修改 jetty 设定（位于 /etc/default/jetty8）：
 
    .. code-block:: ini
 
@@ -95,27 +95,27 @@ a. 修改 jetty 設定（位於 /etc/default/jetty8）：
       JETTY_PORT=8983
       JAVA_OPTIONS="-Dsolr.solr.home=/usr/share/solr $JAVA_OPTIONS" 
 
-b. 安裝 solr4：
+b. 安装 solr4：
 
-   至官網 http://lucene.apache.org/solr/ 下載 solr-4.6.1
+   至官网 http://lucene.apache.org/solr/ 下载 solr-4.6.1
    
-   解壓縮下載回來的壓縮檔
+   解压缩下载回来的压缩文件
    
-   並複製 ./dist 下的 solr-4.6.1.war 至 jetty webapps 目錄（solr 目錄請自行建立）：
+   并复制 ./dist 下的 solr-4.6.1.war 至 jetty webapps 目录（solr 目录请自行建立）：
 
    .. code-block:: bash
 
       $ sudo cp solr-4.6.1.war /usr/share/jetty8/webapps/solr/solr.war
 
-   複製以下目錄至指定位置：
+   复制以下目录至指定位置：
 
-   複製 ./example/solr 至 /usr/share
+   复制 ./example/solr 至 /usr/share
 
-   複製 ./contrib 至 /usr/share/solr/bin
+   复制 ./contrib 至 /usr/share/solr/bin
 
-   複製 ./dist 至 /usr/share/solr
+   复制 ./dist 至 /usr/share/solr
 
-   修改 solr 目錄權限，使 jetty 可以存取：
+   修改 solr 目录权限，使 jetty 可以存取：
    
    .. code-block:: bash
    
@@ -128,27 +128,27 @@ b. 安裝 solr4：
       $ sudo mv /usr/share/solr/collection1/conf/schema.xml /usr/share/solr/collection1/conf/schema.xml.bak
       $ sudo ln -s /usr/lib/ckan/default/src/ckan/ckan/config/solr/schema-2.0.xml /usr/share/solr/collection1/conf/schema.xml
 
-   解壓縮 solr-4.6.1.war：
+   解压缩 solr-4.6.1.war：
    
    .. code-block:: bash
       
       $ jar -xvf solr.war
 
-   複製 b. 所下載之 solr 壓縮檔中之 ./example/lib/ext 下的所有 jar 檔案至 /usr/share/jetty8/webapps/solr/WEB-INF/lib
+   复制 b. 所下载之 solr 压缩文件中之 ./example/lib/ext 下的所有 jar 文件至 /usr/share/jetty8/webapps/solr/WEB-INF/lib
 
-   承上，複製 ./example/resources/log4j.properties 至 /usr/share/jetty8/webapps/solr/WEB-INF/classes
+   承上，复制 ./example/resources/log4j.properties 至 /usr/share/jetty8/webapps/solr/WEB-INF/classes
 
-c. 安裝 IKAnalyzer：
+c. 安装 IKAnalyzer：
 
-   下載 IKAnalyzer https://ik-analyzer.googlecode.com/files/IK%20Analyzer%202012FF_hf1.zip 並解壓縮
+   下载 IKAnalyzer https://ik-analyzer.googlecode.com/files/IK%20Analyzer%202012FF_hf1.zip 并解压缩
 
-   複製 IKAnalyzer2012FF_fh1.jar 至 /var/lib/jetty8/webapps/solr/WEB-INF/lib
+   复制 IKAnalyzer2012FF_fh1.jar 至 /var/lib/jetty8/webapps/solr/WEB-INF/lib
   
-   複製 IKAnalyzer.cfg.xml 和 stopword.dic 至 /var/lib/jetty8/webapps/solr/WEB-INF/class
+   复制 IKAnalyzer.cfg.xml 和 stopword.dic 至 /var/lib/jetty8/webapps/solr/WEB-INF/class
 
-d. 設定 IKAnalyzer：
+d. 设定 IKAnalyzer：
 
-   修改 schema.xml，fieldType name="text" 區段修改為：
+   修改 schema.xml，fieldType name="text" 区段修改为：
 
    .. code-block:: xml
 
@@ -164,26 +164,26 @@ d. 設定 IKAnalyzer：
 
    .. note::
 
-       schema.xml 位於 /usr/share/solr/collection1/conf/schema.xml
+       schema.xml 位于 /usr/share/solr/collection1/conf/schema.xml
 
-e. 啟動 jetty：
+e. 启动 jetty：
 
    .. code-block:: bash
 
       $ sudo service jetty8 start
 
-f. 打開瀏覽器，前往 http://127.0.0.1:8983/solr ，若能看到畫面則代表安裝完成
+f. 打开浏览器，前往 http://127.0.0.1:8983/solr ，若能看到画面则代表安装完成
 
 
-7. 初始化資料庫
+7. 初始化资料库
 ------------------------
-a. 透過 paster 初始化 ckan db：
+a. 透过 paster 初始化 ckan db：
 
    .. code-block:: bash
 
       (pyenv) $ paster db init -c /etc/ckan/default/development.ini
 
-b. 如果一切正常，則會看到此訊息：Initialising DB: SUCCESS
+b. 如果一切正常，则会看到此讯息：Initialising DB: SUCCESS
 
 8. 建立 who.ini link
 ------------------------
@@ -191,9 +191,9 @@ b. 如果一切正常，則會看到此訊息：Initialising DB: SUCCESS
 
       $ ln -s /usr/lib/ckan/default/src/ckan/who.ini /etc/ckan/default/who.ini
 
-9. 新增 ckan 系統管理者
+9. 新增 ckan 系统管理员
 ------------------------
-   透過 paster 新增 ckan 系統管理者：
+   透过 paster 新增 ckan 系统管理员：
 
    .. code-block:: bash
 
@@ -201,14 +201,14 @@ b. 如果一切正常，則會看到此訊息：Initialising DB: SUCCESS
 
    .. note::
 
-      admin 請代換為您需要的使用者名稱，並依照程式提示設定密碼
+      admin 请代换为您需要的使用者名称，并依照程式提示设定密码
 
-10. 在 development 環境下執行
+10. 在 development 环境下运行
 ------------------------------
-a. 透過 paster serve 新安裝的 ckan instance：
+a. 透过 paster serve 新安装的 ckan instance：
 
    .. code-block:: bash
 
       (pyenv) $ paster serve /etc/ckan/default/development.ini
 
-b. 打開瀏覽器，前往 http://127.0.0.1:5000/ ，至此 ckan 安裝完成
+b. 打开浏览器，前往 http://127.0.0.1:5000/ ，至此 ckan 安装完成

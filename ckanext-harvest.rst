@@ -1,26 +1,26 @@
 ckanext-harvest
 ===============
 
-ckanext-harvest 是一個 ckan 的延伸套件（extension），提供一可自訂之介面（interface），以擷取其他網站（或服務）之 metadata，並匯入為 ckan 資料集。
+ckanext-harvest 是一个 ckan 的延伸扩展（extension），提供一可自定义界面（interface），以抓取其他网站（或服务）之 metadata，并汇入为 ckan 数据集。
 
-harvest 的運作大致可分為三步驟（同時也是設計 harvesting interface 的主要結構）:
+harvest 的运行大致可分为三步骤（同时也是设计 harvesting interface 的主要结构）:
 
-* gather: 取得 harvest source 的 id, 數量等基本資訊。
-* fetch: 取得 source 中每個 object（物件，或稱資料集）之 metadata。
-* import: 將上一階段取得的 metadata 轉換並建立為 ckan package（資料集）。
+* gather: 取得 harvest source 的 id, 数量等基本信息。
+* fetch: 取得 source 中每个 object（物件，或称数据集）之 metadata。
+* import: 将上一阶段取得的 metadata 转换并建立为 ckan package（数据集）。
 
-外掛主要功能簡介與使用
+外挂主要功能简介与使用
 ----------------------
 
 新增 harvest source
 ^^^^^^^^^^^^^^^^^^^^
 
-使用瀏覽器開啟 SITE_URL/harvest，選取右上之 "Add Harvest source"，依照畫面輸入 source 網址及選取 source 類別。
+使用浏览器开启 SITE_URL/harvest，选取右上之 "Add Harvest source"，依照画面输入 source 网址及选取 source 类别。
 
-執行 harvest 工作（手動）
+执行 harvest 工作（手动）
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-a. 進入 virtualenv，執行 gather 與 fetch handler：
+a. 进入 virtualenv，执行 gather 与 fetch handler：
 
    .. code-block:: bash
 
@@ -29,50 +29,50 @@ a. 進入 virtualenv，執行 gather 與 fetch handler：
 
    .. note::
 
-      請勿關閉這兩個 handler
+      请勿关闭这两个 handler
 
-b. 使用瀏覽器開啟 SITE_URL/harvest，進入剛才建立的 harvest source，選擇右上的「管理者」按鈕，在接下來的頁面選取 ``Reharvest`` ，將此 harvest 工作送入排程。
+b. 使用浏览器开启 SITE_URL/harvest，进入刚才建立的 harvest source，选择右上的“管理者”按钮，在接下来的页面选取 ``Reharvest`` ，将此 harvest 工作送入排程。
 
-c. 最後進入 virtualenv，執行 run handler：
+c. 最后进入 virtualenv，执行 run handler：
 
    .. code-block:: bash
 
       (pyenv) $ paster --plugin=ckanext-harvest harvester run -c /etc/ckan/default/production.ini
 
 
-   即會立即開始執行剛才加入的工作排程。
+   即会立即开始执行刚才加入的工作排程。
 
    .. note::
 
-      手動執行時 harvest 工作並不會自行停止，因為上述 paster harvester run 指令同時也用來確認 harvest 工作是否完成。因此若您確定 harvest 工作已經完成（或已發生錯誤），可以再次執行 run 指令，即可透過下述 d. 的方式檢視此次工作的結果
+      手动执行时 harvest 工作并不会自行停止，因为上述 paster harvester run 指令同时也用来确认 harvest 工作是否完成。因此若您确定 harvest 工作已经完成（或已发生错误），可以再次执行 run 指令，即可透过下述 d. 的方式检视此次工作的结果
 
-執行 harvest 工作（自動）
+执行 harvest 工作（自动）
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-在 production 環境時，我們會希望系統可以每隔一段時間自動進行 harvesting，此時可以使用 Supervisor 與 cron 來達到目的：
+在 production 环境时，我们会希望系统可以每隔一段时间自动进行 harvesting，此时可以使用 Supervisor 与 cron 来达到目的：
 
-* `Supervisor <http://supervisord.org/>`_ : 一套任務管理工具，可以在背景執行指定之工作，我們用它來在背景執行 harvest 的 ``gather_consumer`` 與 ``fetch_consumer`` 兩個常駐工作。
-* cron: unix/linux 系統工具，可以定時執行之工作，我們用它來定時執行 harvest ``run`` 工作。
+* `Supervisor <http://supervisord.org/>`_ : 一套任务管理工具，可以在背景执行指定之工作，我们用它来在背景执行 harvest 的 ``gather_consumer`` 与 ``fetch_consumer`` 两个常驻工作。
+* cron: unix/linux 系统工具，可以定时执行之工作，我们用它来定时执行 harvest ``run`` 工作。
 
-a. 首先我們要安裝 Supervisor：
+a. 首先我们要安装 Supervisor：
 
    .. code-block:: bash
 
       $ sudo apt-get install supervisor
 
-   您可以透過以下指令確定 Supervisor 是否正在執行：
+   您可以透过以下指令确定 Supervisor 是否正在执行：
 
    .. code-block:: bash
 
       $ ps aux | grep supervisord
 
-   若 Supervisor 正在執行，則會看到類似以下的輸出：
+   若 Supervisor 正在执行，则会看到类似以下的输出：
 
    .. code-block:: bash
 
       root      9224  0.0  0.3  56420 12204 ?        Ss   15:52   0:00 /usr/bin/python /usr/bin/supervisord
 
-b. Supervisor 的設定檔位於 /etc/supervisor/conf.d 目錄下，我們新增一個新的設定檔，命名為 ckan_harvesting.conf，內容如下：
+b. Supervisor 的设置文件位于 /etc/supervisor/conf.d 目录下，我们新增一个新的设置文件，命名为 ckan_harvesting.conf，内容如下：
 
    .. code-block:: python
 
@@ -108,9 +108,9 @@ b. Supervisor 的設定檔位於 /etc/supervisor/conf.d 目錄下，我們新增
       autorestart=true
       startsecs=10
 
-   其中 ``user=okfn`` 請代換成 python virtual environment 的擁有者， ``/var/log/ckan/default`` 目錄請自行新增，擁有者同樣為 virtualenv 擁有者
+   其中 ``user=okfn`` 请代换成 python virtual environment 的拥有者， ``/var/log/ckan/default`` 目录请自行新增，拥有者同样为 virtualenv 拥有者
 
-c. 接著啟動 Supervisor，請依序輸入以下指令：
+c. 接着启动 Supervisor，请依序输入以下指令：
 
    .. code-block:: bash
 
@@ -120,64 +120,64 @@ c. 接著啟動 Supervisor，請依序輸入以下指令：
       $ sudo supervisorctl start ckan_gather_consumer
       $ sudo supervisorctl start ckan_fetch_consumer
 
-   您可以透過以下指令確定工作是否正在執行：
+   您可以透过以下指令确定工作是否正在执行：
 
    .. code-block:: bash
 
       $ sudo supervisorctl status
 
-   若 Supervisor 正在執行，則會看到類似以下的輸出：
+   若 Supervisor 正在执行，则会看到类似以下的输出：
 
    .. code-block:: bash
 
       ckan_fetch_consumer              RUNNING    pid 6983, uptime 0:22:06
       ckan_gather_consumer             RUNNING    pid 6968, uptime 0:22:45
 
-d. 最後我們要建立定時執行 ``run`` 排程，執行下列指令打開排程設定檔：
+d. 最后我们要建立定时执行 ``run`` 排程，执行下列指令打开排程设置文件：
 
    .. code-block:: bash
 
       $ sudo crontab -e -u okfn
 
-   ``okfn`` 請代換為 virtualenv 擁有者
+   ``okfn`` 请代换为 virtualenv 拥有者
 
-e. 進行排程設定，請加入以下文字於 crontab 設定中：
+e. 进行排程设置，请加入以下文字于 crontab 设置中：
 
    # m  h  dom mon dow   command
 
    \*/15 *  *   *   *     /usr/lib/ckan/default/bin/paster --plugin=ckanext-harvest harvester run -c /etc/ckan/default/production.ini
 
-確認 harvest 工作的執行狀況
+确认 harvest 工作的执行状况
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-我們可以在網頁介面，harvest source 的「管理者」頁面確認 harvest 工作的執行狀況，包括錯誤、新增、更新、完成的資料集數目，如下圖所示：
+我们可以在网页介面，harvest source 的“管理者”页面确认 harvest 工作的执行状况，包括错误、新增、更新、完成的数据集数目，如下图所示：
 
    .. image:: harvest-job-status.png
 
-撰寫自定義 harvesting interface
+撰写自定义 harvesting interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-如先前所述，ckanext-harvest 提供可以自行定義的 interface，因此您可以為某個網站，或某種資料來源，特別製作 harvester。
+如先前所述，ckanext-harvest 提供可以自行定义的 interface，因此您可以为某个网站，或某种数据来源，特别制作 harvester。
 
-* 本人撰寫之 `中研院調查研究中心（SRDA）資料庫 <https://srda.sinica.edu.tw/>`_ harvester： `SRDAHarvester <https://github.com/u10313335/ckanext-harvest/blob/master/ckanext/harvest/harvesters/srdaharvester.py>`_
-* ckan 官方提供之 csv harvester 範例： `DataLondonGovUkHarvester <https://github.com/okfn/ckanext-pdeu/blob/master/ckanext/pdeu/harvesters/london.py>`_
+* 本人撰写之 `中研院调查研究中心（SRDA）数据库 <https://srda.sinica.edu.tw/>`_ harvester： `SRDAHarvester <https://github.com/u10313335/ckanext-harvest/blob/master/ckanext/harvest/harvesters/srdaharvester.py>`_
+* ckan 官方提供之 csv harvester 范例： `DataLondonGovUkHarvester <https://github.com/okfn/ckanext-pdeu/blob/master/ckanext/pdeu/harvesters/london.py>`_
 
-系統需求
+系统需求
 --------
-* Python (2 or 3) 安裝於 virtualenv
+* Python (2 or 3) 安装于 virtualenv
 * ckan
 * RabbitMQ 或 Redis
 
-安裝
+安装
 ----
-a. 安裝 RabbitMQ 或 Redis（兩者則一安裝即可，以下用 Redis 作示範）：
+a. 安装 RabbitMQ 或 Redis（两者则一安装即可，以下用 Redis 作示范）：
 
    .. code-block:: bash
 
       $ sudo apt-get install rabbitmq-server
       $ sudo apt-get install redis-server
 
-b. 安裝 ckanext-harvest 套件：
+b. 安装 ckanext-harvest 组件：
 
    .. code-block:: bash
 
@@ -185,15 +185,15 @@ b. 安裝 ckanext-harvest 套件：
 
    .. note::
 
-      release-v2.0 請自行依 ckan 版本替換之
+      release-v2.0 请自行依 ckan 版本替换之
 
-c. 安裝其他需要的 Python 套件：
+c. 安装其他需要的 Python 组件：
 
    .. code-block:: bash
 
       (pyenv) $ pip install -r pip-requirements.txt
 
-d. 修改 ckan 設定檔，修改 ckan.plugins，加入：
+d. 修改 ckan 设置文件，修改 ckan.plugins，加入：
 
    .. code-block:: python
 
@@ -201,7 +201,7 @@ d. 修改 ckan 設定檔，修改 ckan.plugins，加入：
       ...
       ckan.harvest.mq.type = redis
 
-e. 初始化 harvest 資料庫：
+e. 初始化 harvest 数据库：
 
    .. code-block:: bash
 

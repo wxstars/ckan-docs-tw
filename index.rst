@@ -3,20 +3,20 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-ckan 2.0 安裝使用教學
+ckan 2.0 安裝使用教学
 ========================================
 
-ckan 是著名的開放原始碼資料入口平台（Data Portal Platform），
-由 Open data 界大名鼎鼎的 Open Knowledge Foundation（OKF）支持發展。
+ckan 是著名的开放数据门户平台（Data Portal Platform），
+由 Open data 界大名鼎鼎的 Open Knowledge Foundation（OKF）支持发展。
 
-他的功能非常多，除了 data repository 外，還支援 visualize、search、tag、revision、share、organization…，
-更有許多的 plugins 可以強化其功能。
+他的功能非常多，除了 data repository 外，还支持 visualize、search、tag、revision、share、organization…，
+更有许多的 plugins 可以强化其功能。
 
-使用 ckan 最有名的專案，係英國政府開放資料平台 data.gov.uk。
+使用 ckan 最有名的案例，系英国政府开放数据平台 data.gov.uk。
 
-ckan 使用以 Python 為基礎的 Pylons 網頁框架開發，template 使用 jinja（神社）2，多國語言支援採用 Babel 系統，資料庫使用 PostgreSQL，ORM 是 Pylons 推薦的 SQLAlchemy，搜尋功能則使用 Apache Solr 實作，同時搭配 jetty 作為 servlet container。
+ckan 使用以 Python 为基础的 Pylons 网页框架开发，template 使用 jinja（神社）2，多国语言支援采用 Babel 系统，数据库使用 PostgreSQL，ORM 是 Pylons 推荐的 SQLAlchemy，搜索功能则使用 Apache Solr 搭建，同时搭配 jetty 作为 servlet container。
 
-這篇教學文將說明如何自 \*nix OS 從無到有安裝一個 ckan 2.0 系統。環境為 Linux Mint 14 (based on Ubuntu 12.10），大致按照官方文件 `Install from Source <http://docs.ckan.org/en/ckan-2.0/install-from-source.html>`_ 的方式。其他相關的使用心得也會一併公布於此。
+这篇教学文档将说明如何自 \*nix OS 从无到有安装一个 ckan 2.0 系统。环境为 Linux Mint 14 (based on Ubuntu 12.10)，大致按照官方文件 `Install from Source <http://docs.ckan.org/en/ckan-2.0/install-from-source.html>`_ 的方式。其他相关的使用心得也会一并公布于此。
 
 
 .. toctree::
