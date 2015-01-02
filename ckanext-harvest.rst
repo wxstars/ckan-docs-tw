@@ -1,7 +1,7 @@
 ckanext-harvest
 ===============
 
-ckanext-harvest 是一个 ckan 的延伸扩展（extension），提供一可自定义界面（interface），以抓取其他网站（或服务）之 metadata，并汇入为 ckan 数据集。
+ckanext-harvest 是一个 ckan 的扩展（extension），提供一可自定义界面（interface），以抓取其他网站（或服务）之 metadata，并汇入为 ckan 数据集。
 
 harvest 的运行大致可分为三步骤（同时也是设计 harvesting interface 的主要结构）:
 
